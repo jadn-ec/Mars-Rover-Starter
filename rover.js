@@ -11,37 +11,26 @@ class Rover {
      let message = message1.name;
      let commands = message1.commands;
      let results = [];
-     const test = {};
-     test.completed = 'default';
-     test.roverStatus = {};
-     test.roverStatus.mode = this.mode;
-     test.roverStatus.generatorWatts = this.generatorWatts;
-     test.roverStatus.position = this.position;
      for(let i = 0; i < commands.length; i++){  
        if(commands[i].commandType === 'STATUS_CHECK'){
-        test.completed = true; 
-        results.push(JSON.parse(JSON.stringify(test)));
+        results.push( { completed: true, roverStatus:{ mode : this.mode, generatorWatts: this.generatorWatts, position: this.position } } );
        }
        if(commands[i].commandType === 'MODE_CHANGE'){
          if(commands[i].value === 'LOW_POWER'){
-           test.completed = true; 
-           test.roverStatus.mode = 'LOW_POWER';
-           results.push(JSON.parse(JSON.stringify(test)));
+           this.mode = 'LOW_POWER';
+           results.push( { completed: true } );
          }
          if(commands[i].value === 'NORMAL'){
-           test.roverStatus.mode = 'NORMAL'
-           test.completed = true;
-           results.push(JSON.parse(JSON.stringify(test)));
+           this.mode = 'NORMAL';
+           results.push( { completed: true } );
          }
        }
        if(commands[i].commandType === 'MOVE'){
-         if(test.roverStatus.mode === 'LOW_POWER'){
-           test.completed = false;
-           results.push(JSON.parse(JSON.stringify(test)));    
+         if(this.mode === 'LOW_POWER'){
+           results.push( { completed: false } );   
          } else {
-           test.roverStatus.position = commands[i].value
-           test.completed = true;
-           results.push(JSON.parse(JSON.stringify(test)));
+           this.position = commands[i].value;
+           results.push( { completed: true } );
          }
        }
      }
@@ -69,6 +58,6 @@ function run(){
     //console.log(response);
 }
 
-run();
+//run();
 
 module.exports = Rover;

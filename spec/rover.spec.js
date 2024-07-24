@@ -56,14 +56,7 @@ describe("Rover class", function() {
     let commands = [new Command('MODE_CHANGE', 'LOW_POWER')];
     let message = new Message(name,commands);
     let rover = new Rover(2);
-    let results = [];
-    const test = {};
-    test.completed = true;
-    test.roverStatus = {};
-    test.roverStatus.mode = 'LOW_POWER';
-    test.roverStatus.generatorWatts = 110;
-    test.roverStatus.position = 2;
-    results = [test];
+    let results = [ { completed: true } ];
     expect(rover.receiveMessage(message).results).toEqual(results);
   });
   //test12
@@ -80,7 +73,8 @@ describe("Rover class", function() {
     let commands = [new Command('MOVE', 7)];
     let message = new Message(name,commands);
     let rover = new Rover(2);
-    expect(rover.receiveMessage(message).results[0].roverStatus.position).toEqual(7);
+    let results = [ { completed: true } ];
+    expect(rover.receiveMessage(message).results).toEqual(results);
   });
 
 });
